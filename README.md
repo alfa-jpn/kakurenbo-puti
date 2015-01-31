@@ -4,6 +4,8 @@ This gem does not override methods of ActiveRecord.
 
 I think that kakurenbo-puti is cho-iketeru! (very cool!)
 
+[![Build Status](https://travis-ci.org/alfa-jpn/kakurenbo-puti.svg?branch=master)](https://travis-ci.org/alfa-jpn/kakurenbo-puti)
+
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -21,13 +23,86 @@ Or install it yourself as:
     $ gem install kakurenbo-puti
 
 ## Usage
+At first, add `soft_destroyed_at` column to your model.
 
-TODO: Write usage instructions here
+```shell
+rails g migration AddSoftDestroyedAtYourModel soft_destroyed_at:datetime:index
+```
 
-## Contributing
+Next, call `soft_deletable` in model.
 
-1. Fork it ( https://github.com/alfa-jpn/kakurenbo-puti/fork )
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create a new Pull Request
+```ruby
+
+class Member < ActiveRecord::Base
+  soft_deletable
+end
+
+```
+
+
+### Scopes
+
+```ruby
+# Get models without soft-deleted
+Model.without_soft_destroyed
+
+# Get models only soft-deleted
+Model.only_soft_destroyed
+```
+
+### Soft-delete record
+
+```ruby
+model.soft_destroy
+
+# or
+model.soft_destroy!
+
+# check soft_destroyed
+model.soft_destroyed? # => true
+```
+
+# Restore record
+
+```ruby
+model.restore
+
+# or
+model.restore!
+```
+
+## Advanced
+
+### Definition of the dependency
+Use dependent_associations option of `soft-deletable`.
+
+```ruby
+
+class Parent < ActiveRecord::Base
+  soft_deletable
+  has_many :children
+end
+
+class Child < ActiveRecord::Base
+  soft_deletable dependent_associations: [:soft_delete_model, :normal_model]
+  belongs_to :parent
+end
+
+# create instance
+parent = Parent.create!
+child  = Child.create!
+
+# add child
+parent.children << child
+
+child.destroyed? # false
+
+# soft-destroy parent
+parent.soft_destroy
+
+child.destroyed? # true
+
+```
+
+# License
+This gem is released under the MIT license.

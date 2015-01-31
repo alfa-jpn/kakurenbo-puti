@@ -1,11 +1,11 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'kakurenbo/puti/version'
+require 'kakurenbo_puti/version'
 
 Gem::Specification.new do |spec|
   spec.name          = 'kakurenbo-puti'
-  spec.version       = Kakurenbo::Puti::VERSION
+  spec.version       = KakurenboPuti::VERSION
   spec.authors       = ['alfa-jpn']
   spec.email         = ['a.nkmr.ja@gmail.com']
   spec.homepage      = 'https://github.com/alfa-jpn/kakurenbo-puti'
