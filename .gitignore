@@ -1,0 +1,22 @@
+# Test report files.
+/spec/reports/
+/coverage/
+
+# Documentation files.
+/doc/
+/_yardoc/
+/.yardoc
+
+# Temporary files.
+/.bundle/
+/Gemfile.lock
+/pkg/
+/tmp/
+*.bundle
+*.so
+*.o
+*.a
+mkmf.log
+
+# IDE files.
+.idea/
