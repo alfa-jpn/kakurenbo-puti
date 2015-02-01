@@ -5,6 +5,8 @@ This gem does not override methods of ActiveRecord.
 I think that kakurenbo-puti is cho-iketeru! (very cool!)
 
 [![Build Status](https://travis-ci.org/alfa-jpn/kakurenbo-puti.svg?branch=master)](https://travis-ci.org/alfa-jpn/kakurenbo-puti)
+[![Coverage Status](https://coveralls.io/repos/alfa-jpn/kakurenbo-puti/badge.svg)](https://coveralls.io/r/alfa-jpn/kakurenbo-puti)
+[![Code Climate](https://codeclimate.com/github/alfa-jpn/kakurenbo-puti/badges/gpa.svg)](https://codeclimate.com/github/alfa-jpn/kakurenbo-puti)
 
 ## Installation
 
