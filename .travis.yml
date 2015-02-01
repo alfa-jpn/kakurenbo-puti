@@ -1,0 +1,11 @@
+language: ruby
+script: bundle exec rspec
+before_install:
+  - gem install bundler
+rvm:
+  - 2.0.0
+  - 2.1.0
+  - 2.1.2
+env:
+  - ACTIVE_RECORD_VERSION='~> 4.1.0'
+  - ACTIVE_RECORD_VERSION='~> 4.2.0'
