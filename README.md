@@ -86,7 +86,7 @@ class Parent < ActiveRecord::Base
 end
 
 class Child < ActiveRecord::Base
-  soft_deletable dependent_associations: [:soft_delete_model, :normal_model]
+  soft_deletable dependent_associations: [:parent]
   belongs_to :parent
 end
 
@@ -103,6 +103,16 @@ child.destroyed? # false
 parent.soft_destroy
 
 child.destroyed? # true
+
+```
+
+### Change column of datetime of soft-delete.
+
+```ruby
+
+class Member < ActiveRecord::Base
+  soft_deletable :column => :deleted_at
+end
 
 ```
 

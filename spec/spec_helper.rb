@@ -1,8 +1,8 @@
 require 'rubygems'
 require 'bundler/setup'
 require 'supports/active_record_model'
-require 'kakurenbo_puti'
 require 'coveralls'
+require 'kakurenbo-puti'
 
 RSpec.configure do |config|
   config.color = true
