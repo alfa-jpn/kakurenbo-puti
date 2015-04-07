@@ -327,4 +327,33 @@ describe KakurenboPuti::ActiveRecordBase do
       end
     end
   end
+
+  describe '.soft_destroy_all' do
+    subject do
+      model_class.soft_destroy_all
+    end
+    let!(:model_instance) { model_class.create! }
+
+    it 'Soft-Delete model' do
+      expect {
+        subject
+      }.to change {
+        model_class.without_soft_destroyed.count
+      }.to(0)
+    end
+
+    context 'with conditions' do
+      subject do
+        model_class.soft_destroy_all(id: model_instance.id)
+      end
+
+      it 'Soft-Delete model' do
+        expect {
+          subject
+        }.to change {
+          model_class.without_soft_destroyed.count
+        }.to(0)
+      end
+    end
+  end
 end
