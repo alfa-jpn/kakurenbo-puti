@@ -77,6 +77,7 @@ model.restore!
 
 ### Definition of the dependency
 Use dependent_associations option of `soft-deletable`.
+This option is useable only in `belongs_to`.
 
 ```ruby
 

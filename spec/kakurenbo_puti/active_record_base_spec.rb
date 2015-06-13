@@ -19,6 +19,7 @@ describe KakurenboPuti::ActiveRecordBase do
     SoftDeleteModel.tap do |klass|
       klass.class_eval do
         soft_deletable options_cache
+        has_many :soft_delete_children
 
         before_soft_destroy :cb_mock
         after_soft_destroy  :cb_mock
@@ -145,6 +146,16 @@ describe KakurenboPuti::ActiveRecordBase do
   describe '.without_soft_destroyed' do
     subject do
       child_class.without_soft_destroyed
+    end
+
+    context 'When dependent association use in `has_many`' do
+      let :model_class_options do
+        {dependent_associations: [:soft_delete_children]}
+      end
+
+      it 'raise error' do
+        expect { subject }.to raise_error
+      end
     end
 
     context 'When soft-deleted' do
@@ -334,7 +345,7 @@ describe KakurenboPuti::ActiveRecordBase do
     end
     let!(:model_instance) { model_class.create! }
 
-    it 'Soft-Delete model' do
+    it 'SoftDelete model' do
       expect {
         subject
       }.to change {
@@ -347,7 +358,7 @@ describe KakurenboPuti::ActiveRecordBase do
         model_class.soft_destroy_all(id: model_instance.id)
       end
 
-      it 'Soft-Delete model' do
+      it 'SoftDelete model' do
         expect {
           subject
         }.to change {
