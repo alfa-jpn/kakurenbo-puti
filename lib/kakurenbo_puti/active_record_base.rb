@@ -41,14 +41,17 @@ module KakurenboPuti
       def self.create_scopes(target_class, dependent_associations)
         target_class.class_eval do
           scope :only_soft_destroyed, -> { where.not(id: without_soft_destroyed.select(:id)) }
+
           scope :without_soft_destroyed, (lambda do
             dependent_associations.inject(where(soft_delete_column => nil)) do |relation, name|
               association = relation.klass.reflect_on_all_associations.find{|a| a.name == name }
+              raise 'dependent association is usable only in `belongs_to`.' unless association.belongs_to?
+
+              parent_relation = association.klass.all
               if association.klass.method_defined?(:soft_delete_column)
-                relation.joins(name).merge(association.klass.without_soft_destroyed).references(name)
-              else
-                relation.joins(name).references(name)
+                parent_relation = parent_relation.without_soft_destroyed
               end
+              relation.where(association.foreign_key => parent_relation.select(:id))
             end
           end)
         end

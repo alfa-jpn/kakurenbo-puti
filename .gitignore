@@ -20,3 +20,6 @@ mkmf.log
 
 # IDE files.
 .idea/
+
+# bundler directory.
+vendor/bundle/
