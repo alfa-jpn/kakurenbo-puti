@@ -60,7 +60,7 @@ module KakurenboPuti
 
     module InstanceMethods
       # Restore model.
-      # @return [Boolean] Return true if it is success.
+      # @return [Boolean] Return true if it is successfully restored.
       def restore
         true.tap { restore! }
       rescue
@@ -74,7 +74,7 @@ module KakurenboPuti
       end
 
       # Soft-Delete model.
-      # @return [Boolean] Return true if it is success.
+      # @return [Boolean] Return true if it is successfully restored.
       def soft_destroy
         true.tap { soft_destroy! }
       rescue
