@@ -28,7 +28,8 @@ Or install it yourself as:
 At first, add `soft_destroyed_at` column to your model.
 
 ```shell
-rails g migration AddSoftDestroyedAtToYourModel soft_destroyed_at:datetime:index
+$ rails g migration AddSoftDestroyedAtToYourModel soft_destroyed_at:datetime:index
+$ rake db:migrate
 ```
 
 Next, call `soft_deletable` in model.
