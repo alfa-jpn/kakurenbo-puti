@@ -64,7 +64,7 @@ model.soft_destroy!
 model.soft_destroyed? # => true
 ```
 
-# Restore record
+### Restore record
 
 ```ruby
 model.restore
