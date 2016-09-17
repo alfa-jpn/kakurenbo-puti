@@ -149,8 +149,12 @@ describe KakurenboPuti::ActiveRecordBase do
     end
 
     context 'When dependent association use in `has_many`' do
+      subject do
+        model_class.without_soft_destroyed
+      end
+
       let :model_class_options do
-        {dependent_associations: [:soft_delete_children]}
+        { dependent_associations: [:soft_delete_children] }
       end
 
       it 'raise error' do

@@ -12,7 +12,7 @@ def define_active_record_model(model_name, &block)
 
   tableize_name = Inflector.tableize(model_name)
 
-  before :all do
+  before :each do
     migration = ActiveRecord::Migration.new
     migration.verbose = false
     migration.create_table tableize_name, &block
@@ -25,7 +25,7 @@ def define_active_record_model(model_name, &block)
     Object.const_set model_name, mock_class
   end
 
-  after :all do
+  after :each do
     migration = ActiveRecord::Migration.new
     migration.verbose = false
     migration.drop_table tableize_name
