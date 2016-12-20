@@ -99,12 +99,12 @@ child  = Child.create!
 # add child
 parent.children << child
 
-child.destroyed? # false
+child.soft_destroyed? # false
 
 # soft-destroy parent
 parent.soft_destroy
 
-child.destroyed? # true
+child.soft_destroyed? # true
 
 ```
 
