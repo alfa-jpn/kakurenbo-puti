@@ -74,7 +74,7 @@ module KakurenboPuti
       end
 
       # Soft-Delete model.
-      # @return [Boolean] Return true if it is successfully restored.
+      # @return [Boolean] Return true if it is successfully soft-deleted.
       def soft_destroy
         true.tap { soft_destroy! }
       rescue
