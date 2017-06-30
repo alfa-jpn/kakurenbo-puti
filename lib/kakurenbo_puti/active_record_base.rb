@@ -99,7 +99,7 @@ module KakurenboPuti
         if conditions
           where(conditions).soft_destroy_all
         else
-          all.each {|object| object.soft_destroy }
+          all.each { |object| object.soft_destroy }
         end
       end
     end
