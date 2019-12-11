@@ -64,16 +64,16 @@ describe KakurenboPuti::ActiveRecordBase do
   end
 
   describe '.soft_delete_column' do
-    it 'Return column name of soft-delete' do
+    it 'returns default column name to be soft-deleted' do
       expect(model_class.soft_delete_column).to eq(:soft_destroyed_at)
     end
 
-    context 'When with column option' do
+    context "when the option 'column' is present and the option is passed as an argument of 'soft_deletable'" do
       let :model_class_options do
         { column: :deleted_at }
       end
 
-      it 'Return column name of option' do
+      it 'returns column name given to option' do
         expect(model_class.soft_delete_column).to eq(model_class_options[:column])
       end
     end
@@ -85,7 +85,7 @@ describe KakurenboPuti::ActiveRecordBase do
     end
 
     context 'When soft-deleted' do
-      it 'Return a relation without soft-deleted model.' do
+      it 'returns a relation only with soft-deleted records.' do
         expect {
           child_instance.soft_destroy!
         }.to change {
@@ -94,8 +94,8 @@ describe KakurenboPuti::ActiveRecordBase do
       end
     end
 
-    context 'When parent is soft-deleted' do
-      it 'Return a relation without parent soft-deleted model.' do
+    context 'When the instance of parent_class is soft-deleted' do
+      it 'returns a relation only with soft-deleted records. Records of which parents are soft-deleted are included.' do
         expect {
           child_instance.soft_delete_model.soft_destroy!
         }.to change {
@@ -103,12 +103,12 @@ describe KakurenboPuti::ActiveRecordBase do
         }.by(1)
       end
 
-      context 'When dependent association is nothing' do
+      context "when the option 'dependent_associations' is an empty array and the option is passed as an argument of 'soft_deletable'" do
         let :child_class_options do
           { dependent_associations: [] }
         end
 
-        it 'Return a relation with parent soft-deleted model.' do
+        it 'returns a relation only with soft-deleted records. Records of which parents are soft-deleted are not included.' do
           expect {
             child_instance.soft_delete_model.soft_destroy!
           }.not_to change {
@@ -118,8 +118,8 @@ describe KakurenboPuti::ActiveRecordBase do
       end
     end
 
-    context 'When parent is hard-deleted' do
-      it 'Return a relation without parent soft-deleted model.' do
+    context 'When the instance of parent_class is hard-deleted' do
+      it 'returns a relation only with soft-deleted records. Records of which parents are soft-deleted are included.' do
         expect {
           child_instance.normal_model.destroy!
         }.to change {
@@ -127,12 +127,12 @@ describe KakurenboPuti::ActiveRecordBase do
         }.by(1)
       end
 
-      context 'When dependent association is nothing' do
+      context "when the option 'dependent_associations' is an empty array and the option is passed as an argument of 'soft_deletable'" do
         let :child_class_options do
           { dependent_associations: [] }
         end
 
-        it 'Return a relation with parent soft-deleted model.' do
+        it 'returns a relation only with soft-deleted records. Records of which parents are soft-deleted are not included.' do
           expect {
             child_instance.normal_model.destroy!
           }.not_to change {
@@ -148,7 +148,7 @@ describe KakurenboPuti::ActiveRecordBase do
       child_class.without_soft_destroyed
     end
 
-    context 'When dependent association use in `has_many`' do
+    context "when the option 'dependent_associations' is an array and an association name as an argument of `has_many` is included" do
       subject do
         model_class.without_soft_destroyed
       end
@@ -157,13 +157,13 @@ describe KakurenboPuti::ActiveRecordBase do
         { dependent_associations: [:soft_delete_children] }
       end
 
-      it 'raise error' do
+      it 'raises error' do
         expect { subject }.to raise_error
       end
     end
 
     context 'When soft-deleted' do
-      it 'Return a relation without soft-deleted model.' do
+      it 'returns a relation without soft-deleted records.' do
         expect {
           child_instance.soft_destroy!
         }.to change {
@@ -172,8 +172,8 @@ describe KakurenboPuti::ActiveRecordBase do
       end
     end
 
-    context 'When parent is soft-deleted' do
-      it 'Return a relation without parent soft-deleted model.' do
+    context 'When the instance of parent_class is soft-deleted' do
+      it 'returns a relation without soft-deleted records. Records of which parents are soft-deleted are not included.' do
         expect {
           child_instance.soft_delete_model.soft_destroy!
         }.to change {
@@ -181,12 +181,12 @@ describe KakurenboPuti::ActiveRecordBase do
         }.by(-1)
       end
 
-      context 'When dependent association is nothing' do
+      context "when the option 'dependent_associations' is an empty array and the option is passed as an argument of 'soft_deletable'" do
         let :child_class_options do
           { dependent_associations: [] }
         end
 
-        it 'Return a relation with parent soft-deleted model.' do
+        it 'returns a relation without soft-deleted records. Records of which parents are soft-deleted are included.' do
           expect {
             child_instance.soft_delete_model.soft_destroy!
           }.not_to change {
@@ -196,8 +196,8 @@ describe KakurenboPuti::ActiveRecordBase do
       end
     end
 
-    context 'When parent is hard-deleted' do
-      it 'Return a relation without parent soft-deleted model.' do
+    context 'When the instance of parent_class is hard-deleted' do
+      it 'returns a relation without soft-deleted records. Records of which parents are soft-deleted are not included.' do
         expect {
           child_instance.normal_model.destroy!
         }.to change {
@@ -205,12 +205,12 @@ describe KakurenboPuti::ActiveRecordBase do
         }.by(-1)
       end
 
-      context 'When dependent association is nothing' do
+      context "when the option 'dependent_associations' is an empty array and the option is passed as an argument of 'soft_deletable'" do
         let :child_class_options do
           { dependent_associations: [] }
         end
 
-        it 'Return a relation with parent soft-deleted model.' do
+        it 'returns a relation without soft-deleted records. Records of which parents are soft-deleted are included.' do
           expect {
             child_instance.normal_model.destroy!
           }.not_to change {
@@ -230,7 +230,7 @@ describe KakurenboPuti::ActiveRecordBase do
       model_instance.restore
     end
 
-    it 'Restore soft-deleted model.' do
+    it 'restores soft-deleted record.' do
       expect {
         subject
       }.to change {
@@ -238,21 +238,21 @@ describe KakurenboPuti::ActiveRecordBase do
       }.by(1)
     end
 
-    it 'Return truethy value.' do
+    it 'returns truethy value.' do
       expect(subject).to be_truthy
     end
 
-    it 'Run callbacks.' do
+    it 'runs callbacks.' do
       expect(model_instance).to receive(:cb_mock).twice
       subject
     end
 
-    context 'When raise exception.' do
+    context 'When an exception is raised.' do
       before :each do
         allow_any_instance_of(model_class).to receive(:update_column) { raise }
       end
 
-      it 'Return falsey value.' do
+      it 'returns falsey value.' do
         expect(subject).to be_falsey
       end
     end
@@ -263,23 +263,23 @@ describe KakurenboPuti::ActiveRecordBase do
       model_instance.restore!
     end
 
-    context 'When raise exception.' do
+    context 'When an exception is raised.' do
       before :each do
         allow_any_instance_of(model_class).to receive(:update_column) { raise }
       end
 
-      it 'Raise Error.' do
+      it 'raises an error.' do
         expect{ subject }.to raise_error
       end
     end
   end
 
-  describe '#soft_delete' do
+  describe '#soft_destroy' do
     subject do
       model_instance.soft_destroy
     end
 
-    it 'Soft-delete model.' do
+    it 'soft-deletes record.' do
       expect {
         subject
       }.to change {
@@ -287,21 +287,21 @@ describe KakurenboPuti::ActiveRecordBase do
       }.by(-1)
     end
 
-    it 'Return truethy value.' do
+    it 'returns truethy value.' do
       expect(subject).to be_truthy
     end
 
-    it 'Run callbacks.' do
+    it 'runs callbacks.' do
       expect(model_instance).to receive(:cb_mock).twice
       subject
     end
 
-    context 'When raise exception.' do
+    context 'When an exception is raised.' do
       before :each do
         allow_any_instance_of(model_class).to receive(:touch) { raise }
       end
 
-      it 'Return falsey value.' do
+      it 'returns falsey value.' do
         expect(subject).to be_falsey
       end
     end
@@ -312,12 +312,12 @@ describe KakurenboPuti::ActiveRecordBase do
       model_instance.soft_delete!
     end
 
-    context 'When raise exception.' do
+    context 'When an exception is raised.' do
       before :each do
         allow_any_instance_of(model_class).to receive(:update_column) { raise }
       end
 
-      it 'Raise Error.' do
+      it 'raises an error.' do
         expect{ subject }.to raise_error
       end
     end
@@ -328,7 +328,7 @@ describe KakurenboPuti::ActiveRecordBase do
       model_instance.soft_destroyed?
     end
 
-    it 'Return falsey' do
+    it 'returns falsey value' do
       expect(subject).to be_falsey
     end
 
@@ -337,7 +337,7 @@ describe KakurenboPuti::ActiveRecordBase do
         model_instance.soft_destroy!
       end
 
-      it 'Return truthy' do
+      it 'returns truthy value' do
         expect(subject).to be_truthy
       end
     end
@@ -349,7 +349,7 @@ describe KakurenboPuti::ActiveRecordBase do
     end
     let!(:model_instance) { model_class.create! }
 
-    it 'SoftDelete model' do
+    it 'soft-deletes records' do
       expect {
         subject
       }.to change {
@@ -362,7 +362,7 @@ describe KakurenboPuti::ActiveRecordBase do
         model_class.soft_destroy_all(id: model_instance.id)
       end
 
-      it 'SoftDelete model' do
+      it 'soft-deletes records' do
         expect {
           subject
         }.to change {
