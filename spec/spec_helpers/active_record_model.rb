@@ -8,7 +8,7 @@ Inflector = Class.new.extend(ActiveSupport::Inflector)
 # @param [Symbol] Model name.
 # @yield [table] Table column definition.
 def define_active_record_model(model_name, &block)
-  raise 'column definition block is nothing!' unless block_given?
+  raise 'No block is given to define columns!' unless block_given?
 
   tableize_name = Inflector.tableize(model_name)
 
