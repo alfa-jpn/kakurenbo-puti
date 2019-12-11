@@ -5,28 +5,28 @@ describe KakurenboPuti::ActiveRecordBase do
     t.datetime :soft_destroyed_at
   end
 
-  define_active_record_model :OneChild do |t|
+  define_active_record_model :FirstChild do |t|
     t.integer :parent_id
     t.datetime :soft_destroyed_at
   end
 
-  define_active_record_model :TwoChild do |t|
-    t.integer :one_child_id
+  define_active_record_model :SecondChild do |t|
+    t.integer :first_child_id
     t.datetime :soft_destroyed_at
   end
 
-  define_active_record_model :ThreeChild do |t|
-    t.integer :two_child_id
+  define_active_record_model :ThirdChild do |t|
+    t.integer :second_child_id
     t.datetime :soft_destroyed_at
   end
 
-  define_active_record_model :FourChild do |t|
-    t.integer :three_child_id
+  define_active_record_model :FourthChild do |t|
+    t.integer :third_child_id
     t.datetime :soft_destroyed_at
   end
 
-  define_active_record_model :FiveChild do |t|
-    t.integer :four_child_id
+  define_active_record_model :FifthChild do |t|
+    t.integer :fourth_child_id
     t.datetime :soft_destroyed_at
   end
 
@@ -37,8 +37,8 @@ describe KakurenboPuti::ActiveRecordBase do
     end
   end
 
-  let :one_child_class do
-    OneChild.tap do |klass|
+  let :first_child_class do
+    FirstChild.tap do |klass|
       klass.class_eval do
         soft_deletable dependent_associations: [:parent]
         belongs_to :parent
@@ -46,38 +46,38 @@ describe KakurenboPuti::ActiveRecordBase do
     end
   end
 
-  let :two_child_class do
-    TwoChild.tap do |klass|
+  let :second_child_class do
+    SecondChild.tap do |klass|
       klass.class_eval do
-        soft_deletable dependent_associations: [:one_child]
-        belongs_to :one_child
+        soft_deletable dependent_associations: [:first_child]
+        belongs_to :first_child
       end
     end
   end
 
-  let :three_child_class do
-    ThreeChild.tap do |klass|
+  let :third_child_class do
+    ThirdChild.tap do |klass|
       klass.class_eval do
-        soft_deletable dependent_associations: [:two_child]
-        belongs_to :two_child
+        soft_deletable dependent_associations: [:second_child]
+        belongs_to :second_child
       end
     end
   end
 
-  let :four_child_class do
-    FourChild.tap do |klass|
+  let :fourth_child_class do
+    FourthChild.tap do |klass|
       klass.class_eval do
-        soft_deletable dependent_associations: [:three_child]
-        belongs_to :three_child
+        soft_deletable dependent_associations: [:third_child]
+        belongs_to :third_child
       end
     end
   end
 
-  let :five_child_class do
-    FiveChild.tap do |klass|
+  let :fifth_child_class do
+    FifthChild.tap do |klass|
       klass.class_eval do
-        soft_deletable dependent_associations: [:four_child]
-        belongs_to :four_child
+        soft_deletable dependent_associations: [:fourth_child]
+        belongs_to :fourth_child
       end
     end
   end
@@ -86,24 +86,24 @@ describe KakurenboPuti::ActiveRecordBase do
     parent_class.create!
   end
 
-  let :one_child do
-    one_child_class.create!(parent: parent)
+  let :first_child do
+    first_child_class.create!(parent: parent)
   end
 
-  let :two_child do
-    two_child_class.create!(one_child: one_child)
+  let :second_child do
+    second_child_class.create!(first_child: first_child)
   end
 
-  let :three_child do
-    three_child_class.create!(two_child: two_child)
+  let :third_child do
+    third_child_class.create!(second_child: second_child)
   end
 
-  let :four_child do
-    four_child_class.create(three_child: three_child)
+  let :fourth_child do
+    fourth_child_class.create(third_child: third_child)
   end
 
-  let :five_child do
-    five_child_class.create(four_child: four_child)
+  let :fifth_child do
+    fifth_child_class.create(fourth_child: fourth_child)
   end
 
 
@@ -116,7 +116,7 @@ describe KakurenboPuti::ActiveRecordBase do
       expect {
         subject
       }.to change {
-        five_child.soft_destroyed?
+        fifth_child.soft_destroyed?
       }.from(false).to(true)
     end
   end
