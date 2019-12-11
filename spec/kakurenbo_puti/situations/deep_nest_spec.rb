@@ -107,12 +107,12 @@ describe KakurenboPuti::ActiveRecordBase do
   end
 
 
-  context 'When delete root' do
+  context 'When the root instance is deleted' do
     subject do
       parent.soft_destroy
     end
 
-    it 'SoftDestroy dependent tail.' do
+    it 'deletes the tail instance' do
       expect {
         subject
       }.to change {
