@@ -5,7 +5,7 @@ describe '#define_active_record_model' do
     t.integer :price
   end
 
-  it 'created Drink class.' do
+  it 'creates class Drink.' do
     expect(Object.const_defined? :Drink).to be_truthy
   end
 
